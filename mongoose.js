@@ -80,7 +80,7 @@ async function putIssue(id, project, object){
     if(count.modifiedCount > 0){
         return {'result': 'successfully updated', '_id': id}
     } else {
-        return {'result': "don't have anything to updated"}
+        return {error: 'could not update', '_id': id}
     }
     
 }
@@ -92,9 +92,9 @@ async function deleteIssue(id, project){
     })
     
     if(count.deletedCount > 0){
-        return {'result': 'successfully deleted', '_id': id}
+        return {result: 'successfully deleted', '_id': id}
     } else {
-        return {'result': "don't have anything to delete"}
+        return {error: 'could not delete', '_id': id}
     }
     
 }

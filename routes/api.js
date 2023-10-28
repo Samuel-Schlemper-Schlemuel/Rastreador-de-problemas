@@ -16,14 +16,14 @@ module.exports = function (app) {
         objects[i]['_id'] = objectOriginal[i]['_id']
       }  
       
-      for(let i in objects){
+      /*for(let i in objects){
          if(objects[i]['assigned_to'] == undefined){
           objects[i]['assigned_to'] = ''
         }
         if(objects[i]['status_text'] == undefined){
           objects[i]['status_text'] = ''
         }
-      }
+      }*/
 
       if(Object.keys(req.query).length > 0){
         for(let i in req.query){
@@ -68,11 +68,15 @@ module.exports = function (app) {
       delete object['_id']
 
       if(id == '' || id == undefined){
-        res.json({ error: 'missing _id' })
+        return res.json({ error: 'missing _id' })
       }
 
       if(object['open'] == 'false'){
         object['open'] = false
+      }
+      
+      if(Object.keys(object).length == 0){
+        return res.json({error: 'no update field(s) sent', '_id': id})
       }
       
       const result = await mongo.putIssue(id, project, object)
@@ -81,6 +85,10 @@ module.exports = function (app) {
     
     .delete(async function (req, res){
       let project = req.params.project
+
+      if(req.body['_id'] == '' || req.body['_id'] == undefined){
+        return res.json({ error: 'missing _id' })
+      }
       
       const result = await mongo.deleteIssue(req.body['_id'], project)
       return res.json(result)
