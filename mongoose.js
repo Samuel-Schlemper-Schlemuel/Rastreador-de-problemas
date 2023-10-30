@@ -75,28 +75,34 @@ async function putIssue(id, project, object){
         }
     }
 
-    let count = await issueModel.updateOne({'_id': id, project: project}, {$set: {issue: object}})
+    try{
+        let count = await issueModel.updateOne({'_id': id, project: project}, {$set: {issue: object}})
 
-    if(count.modifiedCount > 0){
-        return {'result': 'successfully updated', '_id': id}
-    } else {
+        if(count.modifiedCount == 0){
+            return {error: 'could not update', '_id': id}
+        }
+
+        return {result: 'successfully updated', '_id': id}
+    } catch (e){
         return {error: 'could not update', '_id': id}
     }
-    
 }
 
 async function deleteIssue(id, project){
-    let count = await issueModel.deleteOne({
-        '_id': id,
-        project: project
-    })
-    
-    if(count.deletedCount > 0){
+    try{
+        let count = await issueModel.deleteOne({
+            '_id': id,
+            project: project
+        })
+        
+        if(count.deletedCount == 0){
+            return {error: 'could not delete', '_id': id}
+        }
+
         return {result: 'successfully deleted', '_id': id}
-    } else {
+    } catch (e) {
         return {error: 'could not delete', '_id': id}
-    }
-    
+    }    
 }
 
 module.exports = {saveIssue, getIssues, putIssue, deleteIssue}

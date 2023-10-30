@@ -14,16 +14,7 @@ module.exports = function (app) {
       for(let i in objectOriginal){
         objects.push(objectOriginal[i].issue)
         objects[i]['_id'] = objectOriginal[i]['_id']
-      }  
-      
-      /*for(let i in objects){
-         if(objects[i]['assigned_to'] == undefined){
-          objects[i]['assigned_to'] = ''
-        }
-        if(objects[i]['status_text'] == undefined){
-          objects[i]['status_text'] = ''
-        }
-      }*/
+      }
 
       if(Object.keys(req.query).length > 0){
         for(let i in req.query){
